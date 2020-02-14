@@ -12,6 +12,9 @@
                             http://code.alibabatech.com/schema/dubbo/dubbo.xsd
                             http://www.springframework.org/schema/context
                             http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--加载属性文件，后期在java代码中会使用到属性文件中定义的key和value-->
+    <context:property-placeholder location="classpath:freemarker.properties" order="2"/>
     <!-- 指定应用名称 -->
     <dubbo:application name="health_service_provider"/>
     <!--指定暴露服务的端口，如果不指定默认为20880-->
@@ -20,4 +23,12 @@
     <dubbo:registry address="zookeeper://localhost:2181"/>
     <!--批量扫描，发布服务-->
     <dubbo:annotation package="com.itheima.service"/>
+
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <!--指定模板文件所在目录-->
+        <property name="templateLoaderPath" value="/WEB-INF/ftl/" />
+        <!--指定字符集-->
+        <property name="defaultEncoding" value="UTF-8" />
+    </bean>
+
 </beans>
