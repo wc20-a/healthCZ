@@ -38,7 +38,6 @@ public class CheckItemServiceImpl implements CheckItemService {
 
         PageHelper.startPage(currentPage,pageSize);
         Page<CheckItem> page = checkItemDao.findPage(queryString);
-
         return new PageResult(page.getTotal(),page.getResult());
 
     }
