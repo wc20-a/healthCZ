@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("setmeal")
+@RequestMapping("/setmeal")
 public class SetMealController {
 
     @Reference

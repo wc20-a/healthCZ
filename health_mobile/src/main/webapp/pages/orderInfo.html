@@ -33,7 +33,7 @@
             <div class="contentBox">
                 <div class="card">
                     <div class="">
-                        <img :src="'http://pqjroc654.bkt.clouddn.com/'+setmeal.img" width="100%" height="100%" />
+                        <img :src="'http://q5bg939sx.bkt.clouddn.com/'+setmeal.img" width="100%" height="100%" />
                     </div>
                     <div class="project-text">
                         <h4 class="tit">{{setmeal.name}}</h4>
@@ -107,18 +107,55 @@
                     setmeal:{},//套餐信息
                     orderInfo:{
                         setmealId:id,
-                        sex:'1'
+                        sex:'1',
+                        telephone:"",
+                        idCard:"",
+                        validateCode:"",
+                        orderDate:""
                     }//预约信息
                 },
                 methods:{
                     //发送验证码
                     sendValidateCode(){
-                    },
+                       var telephone = this.orderInfo.telephone;
+                       if(!checkTelephone(telephone)) {
+                           this.$message.error("请填入正确的手机号");
+                           return false;
+                       }
+                       validateCodeButton = $("#validateCodeButton")[0];
+                       clock = setInterval(doLoop,1000);
+
+                        axios("/validateCode/send4Order.do?telephone="+telephone).then((res)=>{
+                            if(res.data.flag){
+                                this.$message({
+                                    type:'success',
+                                    message:res.data.message
+                                })
+                            }
+                            this.$message.error(res.data.message);
+                        })
+0                    },
+                    //校验验证码
+
                     //提交预约
                     submitOrder(){
+                        var idCard = this.orderInfo.idCard;
+                        if(!checkIdCard(idCard)){
+                            this.$message.error("请输入正确的身份证号码!")
+                            return false;
+                        }
+                        axios.post("/order/submit.do",this.orderInfo).then((res)=>{
+                            if(res.data.flag){
+                                window.location.href="orderSuccess.html?orderInfo="+res.data.data;
+                            }
+                            this.$message.error(res.data.message);
+                        })
                     }
                 },
                 mounted(){
+                    axios.get("/setmeal/findById.do?id="+id).then((res)=>{
+                        this.setmeal = res.data.data;
+                    })
                 }
             });
         </script>
